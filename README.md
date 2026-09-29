@@ -1,313 +1,882 @@
-# AI YouTube Shorts Generator
+# AI YouTube Shorts Generator — Arch Linux / DroidSpaces
 
-[![Powered by MuAPI](https://img.shields.io/badge/Powered%20by-MuAPI-6366f1?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMSAxNHYtNGgtMnYtMmg0djZoLTJ6bTAtOFY2aDJ2MmgtMnoiLz48L3N2Zz4=)](https://muapi.ai?utm_source=github&utm_medium=badge&utm_campaign=ai-youtube-shorts-generator)
+AI-powered YouTube Shorts Generator for creating short-form videos from YouTube videos or local video files.
 
+This repository is an adaptation for use on:
 
-**The open-source alternative to Opus Clip, Vidyo.ai, Klap, SubMagic, 2short.ai, and other AI clipping tools.** Drop in any long-form YouTube video and get back ranked, viral-ready 9:16 shorts — for free, with no per-clip credits, no watermarks, and full control over the highlight algorithm.
+- Android
+- Termux
+- DroidSpaces
+- Arch Linux ARM
+- ARM64 / AArch64
+- Python
+- FFmpeg
+- Local AI
 
-Built for creators, agencies, and developers who don't want to pay $20–$300/month or be capped on minutes processed. Uses GPT-class LLM highlight detection and Whisper transcription to extract the most viral-worthy moments and auto-crop them vertically for TikTok, Reels, and Shorts.
+The main code in this project is based on the original open-source project:
 
-<p align="center"><a href="https://www.youtube.com/watch?v=kT1CO4BYV3A"><img src="https://i.ytimg.com/vi/kT1CO4BYV3A/maxresdefault.jpg" width="720"></a></p>
-<p align="center"><a href="https://www.youtube.com/watch?v=kT1CO4BYV3A"><b>▶ Watch: Free Unlimited AI Image Generator (Truly no limits, Open Source, No Watermark) </b></a></p>
+https://github.com/SamurAIGPT/AI-Youtube-Shorts-Generator
 
-> **Building your own Opus Clip–style SaaS?** Skip the infra and ship on the same APIs that power this repo:
-> - [AI Clipping API](https://muapi.ai/playground/ai-clipping?utm_source=github&utm_medium=readme&utm_campaign=ai-youtube-shorts-generator) — end-to-end clip selection + render
-> - [Auto-Crop API](https://muapi.ai/playground/autocrop?utm_source=github&utm_medium=readme&utm_campaign=ai-youtube-shorts-generator) — vertical reframing only
-
-![longshorts](https://github.com/user-attachments/assets/3f5d1abf-bf3b-475f-8abf-5e253003453a)
-
-<p align="center">
-  <a href="https://github.com/Anil-matcha/awesome-generative-ai-apps">
-    <img src="https://img.shields.io/badge/Part%20of-Awesome%20Generative%20AI%20Apps-FFD700?style=for-the-badge&logo=github&logoColor=black" alt="Awesome Generative AI Apps">
-  </a>
-</p>
-
-> 🎨 **[Explore 50+ more open-source AI apps →](https://github.com/Anil-matcha/awesome-generative-ai-apps)**
-
-## Why Use This Instead of Opus Clip / Vidyo.ai / Klap?
-
-| | This repo | Opus Clip / Vidyo.ai / Klap / SubMagic |
-|---|---|---|
-| **Price** | Free + open source (pay only for API usage) | $20–$300/month subscriptions |
-| **Per-clip credits** | None — process unlimited videos | Monthly minute caps, overage fees |
-| **Watermarks** | Never | On free tiers |
-| **Highlight algorithm** | Fully editable virality framework | Black box |
-| **Output format** | Any aspect ratio, any resolution | Locked presets |
-| **Batch processing** | `xargs` an entire URL list | Manual upload one-by-one |
-| **JSON / API output** | Built-in (`--output-json`) | Limited or paid tier only |
-| **Self-hostable** | Yes — runs on your machine or server | SaaS only, your videos sit on their servers |
-| **White-label / embeddable** | Yes — MIT licensed, import as Python lib | No |
-
-## Features
-
-- **🎬 YouTube In, Vertical Out**: Hand it any YouTube URL — get back N viral-ready 9:16 mp4s
-- **🔀 Two Modes — API (fast) or Local (offline)**: Default `--mode api` uses MuAPI for download/transcription/cropping; `--mode local` runs entirely on your machine with `yt-dlp`, `faster-whisper`, and `ffmpeg`/`opencv`, and lets you pick OpenAI or Gemini for highlight ranking
-- **🤖 Virality-Aware Highlight Selection**: Clips ranked on hooks, emotional peaks, opinion bombs, revelation moments, conflict, quotable lines, story peaks, and practical value — not just generic "interesting"
-- **📈 Score + Hook + Reason for Every Clip**: Each highlight comes with a viral score, an opening hook line, and a one-sentence explanation of why it works
-- **🎤 Whisper Transcription, Your Choice**: Cloud (`/openai-whisper` via MuAPI) or local (`faster-whisper`, CPU or CUDA) — same downstream output shape
-- **🧩 Long-Video Aware**: Videos over 30 minutes are auto-chunked with overlap so nothing gets missed
-- **♻️ Smart Dedupe**: Overlapping highlights are collapsed by score so you never get two near-duplicate clips
-- **🎯 Smart Vertical Crop**: API mode uses MuAPI's auto-crop; local mode runs OpenCV face tracking with motion smoothing
-- **📱 Any Aspect Ratio**: 9:16 for TikTok/Reels/Shorts, 1:1 for square, anything else by flag
-- **🧰 CLI + Python Library**: Use it from the shell or import `generate_shorts(...)` into your own pipeline
-- **📦 JSON Output**: `--output-json` dumps the full result (transcript + every candidate highlight + final clip URLs/paths) for downstream automation
-
-## Quick Start (No Setup)
-
-Don't want to self-host? The [AI Clipping API](https://muapi.ai/playground/ai-clipping?utm_source=github&utm_medium=readme&utm_campaign=ai-youtube-shorts-generator) gives you the same Opus Clip–style pipeline as a single HTTP call — no Python, no dependencies, pay-per-clip instead of monthly subscriptions.
+This repository does not claim the upstream code as originally created by Arkael-Dev. It uses and modifies the open-source code to make it more suitable for Android, Termux, DroidSpaces, and Arch Linux ARM environments.
 
 ---
 
-## Installation (Self-Hosted)
+## About the Project
 
-### Prerequisites
+This project takes long-form video and uses AI to identify potentially interesting sections, then generates short-form videos in a vertical format.
 
-- Python 3.10+
-- For **API mode (default)**: a MuAPI key — powers download, transcription, highlight ranking, and clipping in a single dependency
-- For **Local mode** (`--mode local`): `ffmpeg` on your PATH and an LLM API key (`OPENAI_API_KEY` or `GEMINI_API_KEY`; only the LLM step is remote)
+Output can be used for:
 
-### Steps
+- YouTube Shorts
+- TikTok
+- Instagram Reels
+- Other short-form video platforms
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/SamurAIGPT/AI-Youtube-Shorts-Generator.git
-   cd AI-Youtube-Shorts-Generator
-   ```
+Main workflow:
 
-2. **Create and activate a virtual environment:**
-   ```bash
-   python3.10 -m venv venv
-   source venv/bin/activate
-   ```
+    YouTube Video / Local Video
+              ↓
+         Transcription
+              ↓
+        AI Highlight Detection
+              ↓
+         Clip Selection
+              ↓
+          Vertical Crop
+              ↓
+            FFmpeg
+              ↓
+          Short Video
 
-3. **Install Python dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   # Only if you plan to use --mode local:
-   pip install -r requirements-local.txt
-   ```
+---
 
-4. **Set up environment variables:**
+## Features
 
-   Create a `.env` file in the project root:
-   ```bash
-   # API mode (default)
-   MUAPI_API_KEY=your_muapi_key_here
+- 🎬 YouTube URL input
+- 📁 Local video input
+- 🤖 AI highlight detection
+- 🎤 Whisper transcription
+- ✂️ Automatic clip selection
+- 📱 9:16 vertical video
+- 🎯 Highlight ranking
+- ♻️ Overlapping highlight deduplication
+- 🧩 Long-video chunking
+- 📦 JSON output
+- 🧰 CLI
+- 🐍 Python API
+- 🎞️ FFmpeg video processing
+- 📱 Android compatible
+- 🐧 Arch Linux ARM compatible
+- ⚙️ ARM64 / AArch64 compatible
+- 🖥️ Designed to run through DroidSpaces
+- 💻 Usable through Termux
 
-   # Local mode (--mode local)
-   LLM_PROVIDER=openai         # openai or gemini
-   OPENAI_API_KEY=your_openai_key_here
-   OPENAI_MODEL=gpt-4o-mini          # optional, default gpt-4o-mini
-   GEMINI_API_KEY=your_gemini_key_here
-   GEMINI_MODEL=gemini-2.5-flash      # optional, default gemini-2.5-flash
-   LOCAL_WHISPER_MODEL=base          # tiny / base / small / medium / large-v3
-   LOCAL_WHISPER_DEVICE=auto         # auto / cpu / cuda
-   LOCAL_OUTPUT_DIR=output           # where local mp4s land
-   ```
+---
 
-## Usage
+## Environment
 
-### Single video (API mode — default)
+This repository is focused on the following workflow:
 
-```bash
-python main.py "https://www.youtube.com/watch?v=VIDEO_ID"
-```
+    Android
+       ↓
+    Termux
+       ↓
+    DroidSpaces
+       ↓
+    Arch Linux ARM
+       ↓
+    Python
+       ↓
+    AI + Whisper
+       ↓
+    FFmpeg
+       ↓
+    YouTube Shorts
 
-### Single video (Local mode — runs offline except for the LLM call)
+Target architecture:
 
-```bash
-python main.py "https://www.youtube.com/watch?v=VIDEO_ID" --mode local
-```
+    aarch64
 
-Local mode writes the rendered shorts to `./output/short_01.mp4`, `short_02.mp4`, … (override with `LOCAL_OUTPUT_DIR`).
+Check the architecture:
 
-### With options
+    uname -m
 
-```bash
-python main.py "https://www.youtube.com/watch?v=VIDEO_ID" \
-    --mode api \
-    --num-clips 5 \
-    --aspect-ratio 9:16 \
+Expected output:
+
+    aarch64
+
+---
+
+# Installation
+
+## 1. Termux
+
+Termux is used as the Android environment for running DroidSpaces.
+
+Update packages:
+
+    pkg update
+    pkg upgrade
+
+Install Git:
+
+    pkg install git
+
+Verify Git:
+
+    git --version
+
+After that, enter the Arch Linux environment through DroidSpaces.
+
+---
+
+## 2. Arch Linux ARM
+
+After entering Arch Linux through DroidSpaces, check the architecture:
+
+    uname -m
+
+Expected:
+
+    aarch64
+
+Update the system:
+
+    sudo pacman -Syu
+
+If running as root:
+
+    pacman -Syu
+
+Install the basic dependencies:
+
+    sudo pacman -S git python python-pip ffmpeg
+
+If running as root:
+
+    pacman -S git python python-pip ffmpeg
+
+Verify:
+
+    python --version
+    pip --version
+    git --version
+    ffmpeg -version
+
+---
+
+## 3. Clone the Repository
+
+Clone this repository:
+
+    git clone https://github.com/Arkael-Dev/AI-Youtube-Shorts-Generator-Arch-DroidSpaces.git
+
+Enter the project directory:
+
+    cd AI-Youtube-Shorts-Generator-Arch-DroidSpaces
+
+Check the project files:
+
+    ls
+
+---
+
+## 4. Python Virtual Environment
+
+Create a virtual environment:
+
+    python -m venv venv
+
+Activate it:
+
+    source venv/bin/activate
+
+Upgrade pip:
+
+    python -m pip install --upgrade pip
+
+Check Python:
+
+    python --version
+
+---
+
+## 5. Install Python Dependencies
+
+Install the main dependencies:
+
+    pip install -r requirements.txt
+
+If the project includes additional local dependencies:
+
+    pip install -r requirements-local.txt
+
+Use the requirements files included in the version of the repository you are using.
+
+---
+
+# AI Backend
+
+The project uses the AI backend provided by the configuration and source code available in the repository.
+
+For local workflows, the AI components can be used with a local environment compatible with ARM64.
+
+If using Ollama as a local AI backend, verify that Ollama is available:
+
+    ollama --version
+
+Start the service:
+
+    ollama serve
+
+From another terminal:
+
+    curl http://127.0.0.1:11434/api/tags
+
+Install a model suitable for your device.
+
+Example:
+
+    ollama pull llama3.2
+
+Check installed models:
+
+    ollama list
+
+Ollama endpoint:
+
+    http://127.0.0.1:11434
+
+Model and provider configuration must follow the implementation available in the repository source code.
+
+---
+
+# FFmpeg
+
+FFmpeg is used for video processing and rendering.
+
+Check FFmpeg:
+
+    ffmpeg -version
+
+Find the binary:
+
+    which ffmpeg
+
+If it is not installed:
+
+    sudo pacman -S ffmpeg
+
+---
+
+# Whisper
+
+Whisper is used for audio/video transcription.
+
+For the local environment, transcription dependencies follow the project configuration.
+
+The Whisper model can be selected according to the capabilities of the device.
+
+Smaller models require fewer system resources.
+
+On Android ARM64, transcription may take longer than on desktop systems with dedicated GPUs.
+
+---
+
+# Usage
+
+## YouTube Video
+
+Use a YouTube URL as the input:
+
+    python main.py "https://www.youtube.com/watch?v=VIDEO_ID"
+
+---
+
+## Local Video
+
+The project can also process local video files when local mode is supported by the source code.
+
+Example:
+
+    python main.py "/path/to/video.mp4" --mode local
+
+Or:
+
+    python main.py "file:///path/to/video.mp4" --mode local
+
+Check available options:
+
+    python main.py --help
+
+---
+
+# Generate Shorts
+
+Example:
+
+    python main.py "https://www.youtube.com/watch?v=VIDEO_ID" \
+        --mode local \
+        --num-clips 5 \
+        --aspect-ratio 9:16
+
+Shorts aspect ratio:
+
+    9:16
+
+Example resolution:
+
+    1080x1920
+
+On devices with limited resources, a lower resolution can be used according to the FFmpeg configuration.
+
+---
+
+# Python API
+
+The upstream project provides a Python API through:
+
+    from shorts_generator import generate_shorts
+
+Example:
+
+    result = generate_shorts(
+        "/path/to/video.mp4",
+        num_clips=5,
+        aspect_ratio="9:16",
+        mode="local",
+    )
+
+Then:
+
+    for short in result["shorts"]:
+        print(short["score"])
+        print(short["title"])
+        print(short["clip_url"])
+
+The API and parameters follow the source code available in the repository.
+
+---
+
+# Batch Processing
+
+Create:
+
+    urls.txt
+
+Put one YouTube URL on each line.
+
+Example:
+
+    https://www.youtube.com/watch?v=VIDEO_ID_1
+    https://www.youtube.com/watch?v=VIDEO_ID_2
+    https://www.youtube.com/watch?v=VIDEO_ID_3
+
+Then run:
+
+    xargs -a urls.txt -I{} python main.py "{}"
+
+---
+
+# CLI Options
+
+CLI options follow the implementation available in the source code.
+
+Common options include:
+
+    --mode
+
+Selects the processing mode.
+
+    --num-clips
+
+Sets the number of Shorts to generate.
+
+    --aspect-ratio
+
+Sets the output aspect ratio.
+
+Example:
+
+    --aspect-ratio 9:16
+
+    --format
+
+Sets the source quality/resolution.
+
+Example:
+
+    --format 720
+
+    --language
+
+Forces the transcription language.
+
+Example:
+
+    --language en
+
+    --output-json
+
+Saves the processing result as JSON.
+
+Example:
+
     --output-json result.json
-```
 
-### Local file or path
+View all available options:
 
-In `--mode local`, you can pass a `file://` URL or a direct filesystem path and skip YouTube entirely:
+    python main.py --help
 
-```bash
-python main.py "/Users/you/Videos/input.mp4" --mode local
-python main.py "file:///Users/you/Videos/input.mp4" --mode local
-```
+---
 
-The Python API works the same way:
+# Output
 
-```python
-from shorts_generator import generate_shorts
+In local mode, generated videos can be stored in the output directory.
 
-result = generate_shorts(
-    "/Users/you/Videos/input.mp4",
-    num_clips=5,
-    aspect_ratio="9:16",
-    mode="local",
-)
-for short in result["shorts"]:
-    print(short["score"], short["title"], short["clip_url"])
-```
+Example:
 
-Local transcription is cached as an `.srt` file in `LOCAL_OUTPUT_DIR` using the
-video's base name. If the cache already exists and is newer than the source
-file, the app reuses it instead of running Whisper again.
+    output/
 
-Local downloads are also cached in `LOCAL_OUTPUT_DIR` as
-`source_<youtube_id>.mp4` when the input is a YouTube URL. If that file already
-exists, the app skips `yt-dlp` and reuses the cached video.
+Example files:
 
-### Batch processing
+    output/short_01.mp4
+    output/short_02.mp4
+    output/short_03.mp4
 
-Create a `urls.txt` file with one URL per line, then:
+The exact output location follows the project configuration.
 
-```bash
-xargs -a urls.txt -I{} python main.py "{}"
-```
+---
 
-### CLI flags
+# Cache
 
-| Flag | Default | Notes |
-|------|---------|-------|
-| `--mode` | `api` | `api` (MuAPI, fast, no setup) or `local` (remote URL, `file://`, or local path + faster-whisper + LLM provider + ffmpeg) |
-| `--num-clips` | `3` | How many shorts to render |
-| `--aspect-ratio` | `9:16` | Any ratio; `9:16` for TikTok/Reels, `1:1` for square |
-| `--format` | `720` | Source download resolution: `360` / `480` / `720` / `1080` |
-| `--language` | auto | Force Whisper language code (e.g. `en`) |
-| `--output-json` | — | Dump the full result (transcript + all candidates) to a file |
+Local transcription can use cached results so Whisper does not need to run again when a valid transcription already exists for the source video.
 
-### API mode vs Local mode
+YouTube downloads may also use cached source files when caching is supported by the local project configuration.
 
-| Step | API mode (`--mode api`) | Local mode (`--mode local`) |
-|---|---|---|
-| Download | MuAPI `/youtube-download` | `yt-dlp` for remote URLs, direct file path for local inputs |
-| Transcription | MuAPI `/openai-whisper` | `faster-whisper` (CPU or CUDA) |
-| Highlight LLM | MuAPI `gpt-5-mini` | `LLM_PROVIDER=openai` uses OpenAI (`gpt-4o-mini` by default), `LLM_PROVIDER=gemini` uses Gemini (`gemini-2.5-flash` by default) |
-| Vertical crop | MuAPI `/autocrop` | `ffmpeg` + OpenCV face tracking |
-| Output | hosted URLs | local mp4 paths |
-| Required keys | `MUAPI_API_KEY` | `OPENAI_API_KEY` or `GEMINI_API_KEY` (+ `ffmpeg` on PATH) |
+This can reduce:
 
-## How It Works
+- Download time
+- Bandwidth usage
+- Transcription time
+- CPU usage
 
-1. **Download**: Fetches the source video from YouTube
-2. **Transcribe**: MuAPI `/openai-whisper` produces a timestamped transcript (verbose_json segments)
-3. **Detect content type**: An LLM classifies the video (podcast, interview, tutorial, vlog, etc.) and density, so the prompt can be tuned per content style
-4. **Long-video chunking**: Videos > 30 min are split into 20-min overlapping chunks
-5. **Highlight ranking**: An LLM scans the transcript through a virality framework — hook moments, emotional peaks, opinion bombs, revelations, conflict, quotables, story peaks, practical value — and emits ranked candidates with scores 0–100
-6. **Dedupe**: Overlapping candidates are collapsed by score (>50% overlap → keep the higher score)
-7. **Top-N selection**: The top `--num-clips` candidates are selected
-8. **Auto-crop**: Each highlight is rendered as a vertical short at the requested aspect ratio
+---
 
-**Output**: a list of mp4 URLs plus, for each clip, its title, viral score, hook sentence, and a one-line reason explaining why it should perform.
+# Highlight Detection
 
-## Output
+AI analyzes the transcript to identify potentially interesting sections.
 
-Console output looks like:
+Highlight criteria may include:
 
-```
-========================================================================
-Highlights:    7 candidates → kept top 3
-========================================================================
+- Hook
+- Emotional peak
+- Opinion
+- Revelation
+- Conflict
+- Quotable statement
+- Story peak
+- Practical value
 
-#1  score=92  124.3s → 187.6s
-     title:  The one mistake that cost me $50K
-     hook:   "Nobody talks about this, but it killed my first startup..."
-     clip:   https://.../short_1.mp4
+Each highlight candidate may contain:
 
-#2  score=88  ...
-```
+- Score
+- Title
+- Hook
+- Reason
+- Start time
+- End time
 
-`--output-json result.json` produces:
+The highlight algorithm follows the implementation of the open-source source code used by this project.
 
-```json
-{
-  "source_video_url": "...",
-  "transcript": { "duration": 1873.4, "segments": [...] },
-  "highlights": [ {...}, {...}, ... ],
-  "shorts": [
-    {
-      "title": "...",
-      "start_time": 124.3,
-      "end_time": 187.6,
-      "score": 92,
-      "hook_sentence": "...",
-      "virality_reason": "...",
-      "clip_url": "https://.../short_1.mp4"
-    }
-  ]
-}
-```
+---
 
-## Configuration
+# Long Videos
 
-### Highlight selection criteria
-Edit `shorts_generator/highlights.py`:
-- **Virality framework**: `VIRALITY_CRITERIA` — the ranked list of signals the LLM optimizes for
-- **System prompt**: `HIGHLIGHT_SYSTEM_PROMPT` — duration sweet spot, hook rules, JSON schema
-- **Chunk size**: `CHUNK_SIZE_SECONDS` (default 1200) — chunk length for long videos
-- **Long-video threshold**: `LONG_VIDEO_THRESHOLD` (default 1800) — videos longer than this are chunked
-- **Chunk overlap**: `CHUNK_OVERLAP_SECONDS` (default 60) — overlap between chunks so cross-boundary clips aren't missed
+Long videos can be processed using a chunking system.
 
-### Polling / timeout
-Edit `shorts_generator/config.py` (or set env vars):
-- `MUAPI_POLL_INTERVAL` (default 5s) — seconds between job-status polls
-- `MUAPI_POLL_TIMEOUT` (default 1800s) — give up after this long
+Videos exceeding a configured duration can be divided into multiple sections with overlap.
 
-### Whisper transcription
-Audio is transcribed by MuAPI's `/openai-whisper` endpoint (server-side `whisper-1`). Pass `--language <code>` to lock the recognition to a specific language; otherwise it auto-detects.
+This helps:
 
-## Project Structure
+- Keep transcripts manageable
+- Reduce the chance of missing highlights across chunk boundaries
+- Allow AI to process long videos in smaller sections
 
-```
-AI-Youtube-Shorts-Generator/
-├── main.py                       CLI entry point
-├── requirements.txt              core deps (api mode)
-├── requirements-local.txt        optional deps for --mode local
-├── .env.example
-└── shorts_generator/
-    ├── config.py                 env / settings (MuAPI + local LLM + Whisper)
-    ├── muapi.py                  generic submit + poll wrapper
-    ├── downloader.py             API mode: YouTube download via MuAPI
-    ├── transcriber.py            API mode: MuAPI /openai-whisper client
-    ├── highlights.py             shared LLM virality ranking (pluggable backend)
-    ├── clipper.py                API mode: MuAPI /autocrop
-    ├── pipeline.py               mode dispatcher (api ↔ local)
-    └── local/                    --mode local backends (offline)
-        ├── downloader.py         yt-dlp download
-        ├── transcriber.py        faster-whisper transcription
-        ├── llm.py                OpenAI or Gemini client selector
-        └── clipper.py            ffmpeg cut + OpenCV vertical crop
-```
+Chunking parameters follow the project source code configuration.
 
-## Troubleshooting
+---
 
-### Whisper produced no segments
-The video may have no detectable speech, or it may be in a language Whisper struggles with. Try passing `--language en` (or the correct ISO-639-1 code) to skip auto-detection.
+# Smart Deduplication
 
-### Looking for better results?
-The [AI Clipping API](https://muapi.ai/playground/ai-clipping?utm_source=github&utm_medium=readme&utm_campaign=ai-youtube-shorts-generator) uses an improved algorithm that produces higher-quality clips with better highlight detection.
+When multiple highlight candidates overlap or are very close in time, the deduplication system can reduce duplicate or nearly identical Shorts.
 
-## Contributing
+This helps prevent generating multiple clips from essentially the same section.
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+---
 
-## License
+# Vertical Crop
 
-This project is licensed under the MIT License.
+Horizontal videos can be converted into vertical videos.
 
-## Related Projects
+Primary target:
 
-- [awesome-vibecoded-saas](https://github.com/Anil-matcha/awesome-vibecoded-saas) — broader catalog of open-source SaaS alternatives featuring this Shorts workflow.
-- [Muapi open-source alternatives](https://muapi.ai/open-source/alternative) — compare the Shorts workflow with the paid creator tools it targets.
-- [AI Influencer Generator](https://github.com/SamurAIGPT/AI-Influencer-Generator)
-- [Text to Video AI](https://github.com/SamurAIGPT/Text-To-Video-AI)
-- [Faceless Video Generator](https://github.com/SamurAIGPT/Faceless-Video-Generator)
-- [AI B-roll Generator](https://github.com/Anil-matcha/AI-B-roll)
-- [No-code YouTube Shorts Generator](https://www.vadoo.tv/clip-youtube-video)
-- [ai-creator-academy](https://github.com/Anil-matcha/ai-creator-academy) — free curriculum teaching creators how to monetize AI-generated shorts and video content
+    9:16
+
+Suitable for:
+
+- YouTube Shorts
+- TikTok
+- Instagram Reels
+
+Cropping behavior follows the implementation available in the source code.
+
+---
+
+# JSON Output
+
+The project can save analysis results as JSON when:
+
+    --output-json
+
+is used.
+
+Example:
+
+    python main.py "https://www.youtube.com/watch?v=VIDEO_ID" \
+        --output-json result.json
+
+The output may contain:
+
+- Source video
+- Transcript
+- Highlight candidates
+- Score
+- Title
+- Hook
+- Virality reason
+- Start time
+- End time
+- Output clip
+
+The exact JSON structure follows the source code implementation.
+
+---
+
+# Configuration
+
+Project configuration follows the configuration files and environment variables available in the repository.
+
+Examples of local configuration variables that may be used by the source code:
+
+    LLM_PROVIDER
+    OPENAI_API_KEY
+    OPENAI_MODEL
+    GEMINI_API_KEY
+    GEMINI_MODEL
+    LOCAL_WHISPER_MODEL
+    LOCAL_WHISPER_DEVICE
+    LOCAL_OUTPUT_DIR
+
+If an additional local AI backend such as Ollama is used, its configuration must follow the implementation available in the repository version being used.
+
+Do not add environment variables that are not supported by the source code.
+
+---
+
+# Android / DroidSpaces Notes
+
+This project is adapted to run the open-source source code in an Android environment through DroidSpaces.
+
+Because Android devices have limited resources compared with desktop systems, pay attention to:
+
+- RAM
+- CPU
+- Storage
+- Device temperature
+- Thermal throttling
+- AI model size
+- Video duration
+- Output resolution
+
+AI inference and video rendering can use significant CPU resources.
+
+For devices with limited RAM:
+
+- Use smaller AI models
+- Use smaller Whisper models
+- Reduce the number of clips
+- Use a lower output resolution
+- Avoid running multiple heavy processes simultaneously
+
+---
+
+# ARM64
+
+Target environment:
+
+    ARM64
+    AArch64
+
+Check:
+
+    uname -m
+
+Expected:
+
+    aarch64
+
+Not every Python dependency provides an ARM64 binary or wheel.
+
+If a dependency does not provide an ARM64 wheel, pip may attempt to build it from source.
+
+Building from source may require additional packages and may take longer.
+
+---
+
+# Project Structure
+
+The project structure follows the source code being used.
+
+Example:
+
+    AI-Youtube-Shorts-Generator-Arch-DroidSpaces/
+    ├── README.md
+    ├── main.py
+    ├── requirements.txt
+    ├── requirements-local.txt
+    ├── .env.example
+    └── shorts_generator/
+        ├── config.py
+        ├── muapi.py
+        ├── downloader.py
+        ├── transcriber.py
+        ├── highlights.py
+        ├── clipper.py
+        ├── pipeline.py
+        └── local/
+            ├── downloader.py
+            ├── transcriber.py
+            ├── llm.py
+            └── clipper.py
+
+The structure may change as the source code develops.
+
+---
+
+# Troubleshooting
+
+## Ollama Connection
+
+Check:
+
+    ollama --version
+
+Start:
+
+    ollama serve
+
+Then:
+
+    curl http://127.0.0.1:11434/api/tags
+
+---
+
+## Model Not Found
+
+Check:
+
+    ollama list
+
+Install a model:
+
+    ollama pull llama3.2
+
+---
+
+## FFmpeg Not Found
+
+Check:
+
+    which ffmpeg
+
+Install:
+
+    sudo pacman -S ffmpeg
+
+---
+
+## Python Dependency Error
+
+Make sure the virtual environment is active:
+
+    source venv/bin/activate
+
+Then:
+
+    python -m pip install --upgrade pip
+
+Install dependencies:
+
+    pip install -r requirements.txt
+
+---
+
+## Permission Denied
+
+Check:
+
+    ls -la
+
+If necessary:
+
+    chmod +x filename
+
+---
+
+## Storage Full
+
+Check:
+
+    df -h
+
+Check output size:
+
+    du -sh output/
+
+Remove old video files that are no longer needed.
+
+---
+
+# Performance
+
+Performance depends on the device and configuration.
+
+Factors include:
+
+- CPU
+- RAM
+- AI model
+- Whisper model
+- Quantization
+- Storage
+- Video resolution
+- Video duration
+- FFmpeg
+- Thermal throttling
+
+Android ARM64 performance will vary from device to device and may differ significantly from desktop x86_64 systems or dedicated GPUs.
+
+---
+
+# Open Source Attribution
+
+This project uses open-source source code from:
+
+    https://github.com/SamurAIGPT/AI-Youtube-Shorts-Generator
+
+The upstream source code is used as the foundation of this project and has been adapted for:
+
+    Android
+    Termux
+    DroidSpaces
+    Arch Linux ARM
+    ARM64
+
+The modifications in this repository are intended to adapt the installation, environment, configuration, and usage of the project for Android/Linux ARM devices.
+
+Copyright notices and license terms from the upstream project remain applicable.
+
+See the LICENSE file in this repository for the applicable license terms.
+
+---
+
+# Original Project
+
+Original project:
+
+    https://github.com/SamurAIGPT/AI-Youtube-Shorts-Generator
+
+The upstream project provides the main implementation of the AI YouTube Shorts Generator.
+
+This repository is an adaptation/modification for:
+
+    Android
+    Termux
+    DroidSpaces
+    Arch Linux ARM
+
+---
+
+# Credits
+
+Special thanks to the developers and contributors of the open-source projects used as the foundation of this repository.
+
+Original source:
+
+    SamurAIGPT / AI-Youtube-Shorts-Generator
+
+Open-source components used by the project may include:
+
+- Python
+- FFmpeg
+- Whisper / faster-whisper
+- OpenCV
+- yt-dlp
+- LLM providers
+- Other open-source components listed in the source code and requirements
+
+The credits and licenses of each respective project remain applicable.
+
+---
+
+# License
+
+This repository uses and modifies open-source code.
+
+The applicable license terms are those provided by the upstream source code and the respective dependencies.
+
+Do not remove copyright notices or license information from the upstream source code.
+
+For the complete license terms, see:
+
+    LICENSE
+
+Original project:
+
+    https://github.com/SamurAIGPT/AI-Youtube-Shorts-Generator
+
+---
+
+# Repository
+
+    https://github.com/Arkael-Dev/AI-Youtube-Shorts-Generator-Arch-DroidSpaces
+
+---
+
+# Author / Maintainer
+
+    Arkael-Dev
+
+This repository is maintained by Arkael-Dev as an adaptation and continued development of the AI YouTube Shorts Generator for Android, Termux, DroidSpaces, and Arch Linux ARM.
+
+---
+
+# Disclaimer
+
+This project is provided for learning, experimentation, software development, automation, and content creation.
+
+Users are responsible for:
+
+- Videos they process
+- Copyright of source videos
+- Audio
+- Images
+- Footage
+- AI models
+- Generated content
+- Use of generated videos
+- Compliance with YouTube policies
+- Compliance with the policies of other platforms
+
+Make sure that all media and materials used have the appropriate rights or permissions.
