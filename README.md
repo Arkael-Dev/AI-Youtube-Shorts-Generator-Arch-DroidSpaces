@@ -56,8 +56,9 @@ No manual Python dependency installation is required.
 Usage
 
 Start the generator:
-
+```
 ./run.sh
+```
 
 Then select:
 
@@ -70,13 +71,13 @@ Example:
 https://youtu.be/VIDEO_ID
 
 The generated Shorts are automatically copied to:
-
+```
 /storage/emulated/0/CLIPPER
-
+```
 On a normal Arch Linux desktop, the output directory is:
-
+```
 ~/CLIPPER
-
+```
 Requirements
 
 Recommended:
@@ -112,4 +113,4 @@ See the included "LICENSE" file and the upstream repository for license details.
 
 ---
 
-Maintained by Arkael-Dev
+Maintained by [Arkael-Dev](https://github.com/Arkael-Dev/AI-Youtube-Shorts-Generator-Arch-DroidSpaces/edit/main/README.md)
