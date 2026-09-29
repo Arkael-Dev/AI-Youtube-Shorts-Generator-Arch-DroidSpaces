@@ -1,5 +1,3 @@
-MAX_CLIP_DURATION = 60.0
-
 """Local clipping: ffmpeg subclip + OpenCV face-aware vertical crop.
 
 Two stages per highlight:
@@ -68,18 +66,37 @@ def _reframe_vertical(in_path: str, out_path: str, aspect_ratio: str) -> str:
     crop_w = max(2, crop_w - (crop_w % 2))
     crop_h = max(2, crop_h - (crop_h % 2))
 
-    # OpenCV 5 compatibility: fixed center crop.
-    # Haar Cascade face tracking is unavailable in OpenCV 5.
+    # OpenCV 5 compatibility: use center crop.
+    center_x = width // 2
+    center_y = height // 2
     silent_path = out_path + ".silent.mp4"
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     writer = cv2.VideoWriter(silent_path, fourcc, fps, (crop_w, crop_h))
 
-    last_center: Tuple[int, int] = (src_w // 2, src_h // 2)
-
+    last_center: Optional[Tuple[int, int]] = None
+    smoothing = 0.15  # how aggressively to chase a new face position
     while True:
         ret, frame = cap.read()
         if not ret:
             break
+
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(40, 40))
+        if len(faces) > 0:
+            # Pick the largest face — usually the speaker.
+            x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
+            cx = x + w // 2
+            cy = y + h // 2
+            if last_center is None:
+                last_center = (cx, cy)
+            else:
+                lx, ly = last_center
+                last_center = (
+                    int(lx + (cx - lx) * smoothing),
+                    int(ly + (cy - ly) * smoothing),
+                )
+        if last_center is None:
+            last_center = (src_w // 2, src_h // 2)
 
         cx, cy = last_center
         x0 = max(0, min(src_w - crop_w, cx - crop_w // 2))
@@ -114,10 +131,6 @@ def crop_clip_local(
     out_path: str,
 ) -> str:
     """Cut + reframe one highlight, returning the local mp4 path."""
-    # Shorts: hard limit every clip to 60 seconds.
-    start_time = max(0.0, float(start_time))
-    end_time = min(float(end_time), start_time + MAX_CLIP_DURATION)
-
     cut_path = out_path + ".cut.mp4"
     try:
         _cut_subclip(source_path, start_time, end_time, cut_path)

@@ -2,6 +2,8 @@
 from ..config import (
     GEMINI_MODEL,
     LLM_PROVIDER,
+    OLLAMA_BASE_URL,
+    OLLAMA_MODEL,
     OPENAI_MODEL,
     require_gemini_key,
     require_openai_key,
@@ -26,6 +28,16 @@ def call_openai_llm(prompt: str) -> str:
     )
     return response.choices[0].message.content or ""
 
+
+def call_ollama_llm(prompt: str) -> str:
+    from openai import OpenAI
+    client = OpenAI(base_url=OLLAMA_BASE_URL, api_key="ollama")
+    response = client.chat.completions.create(
+        model=OLLAMA_MODEL,
+        temperature=0.2,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return response.choices[0].message.content or ""
 
 def call_gemini_llm(prompt: str) -> str:
     """Gemini backend used by --mode local when LLM_PROVIDER=gemini."""
@@ -57,6 +69,8 @@ def call_local_llm(prompt: str) -> str:
         return call_openai_llm(prompt)
     if provider == "gemini":
         return call_gemini_llm(prompt)
+    if provider == "ollama":
+        return call_ollama_llm(prompt)
     raise RuntimeError(
         f"Unknown LLM_PROVIDER={provider!r}. Use 'openai' or 'gemini'."
     )

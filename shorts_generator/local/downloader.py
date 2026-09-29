@@ -30,8 +30,8 @@ def _format_for(fmt: str) -> str:
     except ValueError:
         height = 720
     return (
-        f"bestvideo[height<={height}][ext=mp4]+bestaudio[ext=m4a]/"
-        f"best[height<={height}][ext=mp4]/best"
+        f"bv*[height<={height}]+ba/"
+        f"b[height<={height}]/best"
     )
 
 
@@ -116,8 +116,8 @@ def download_youtube_local(video_url: str, fmt: str = "720", out_dir: Optional[s
         "outtmpl": os.path.join(out_dir, "source_%(id)s.%(ext)s"),
         "merge_output_format": "mp4",
         "quiet": True,
-        "no_warnings": True,
-        "noprogress": True,
+        "no_warnings": False,
+        "noprogress": False,
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
