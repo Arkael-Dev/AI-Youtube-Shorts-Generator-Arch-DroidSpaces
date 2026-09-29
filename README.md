@@ -113,4 +113,4 @@ See the included "LICENSE" file and the upstream repository for license details.
 
 ---
 
-Maintained by [Arkael-Dev](https://github.com/Arkael-Dev/AI-Youtube-Shorts-Generator-Arch-DroidSpaces/edit/main/README.md)
+Maintained by [Arkael-Dev](https://github.com/Arkael-Dev)
