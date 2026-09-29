@@ -1,4 +1,4 @@
-AI YouTube Shorts Generator — Arch DroidSpaces
+AI YouTube Shorts Generator — Arch DroidSpaces & Desktop Arch linux
 
 AI YouTube Shorts Generator for Android + Termux + DroidSpaces + Arch Linux ARM (AArch64).
 
