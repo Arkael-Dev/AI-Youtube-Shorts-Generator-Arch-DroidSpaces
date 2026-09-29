@@ -129,4 +129,4 @@ Please refer to the original repository and included license files for the appli
 
 ---
 
-Maintained by Arkael-Dev
+Maintained by [arkael-dev](https://github.com/Arkael-Dev)
