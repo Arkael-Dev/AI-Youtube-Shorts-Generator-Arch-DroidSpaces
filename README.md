@@ -31,13 +31,14 @@ Installation
 
 Clone the repository:
 
+```
 git clone https://github.com/Arkael-Dev/AI-Youtube-Shorts-Generator-Arch-DroidSpaces.git
 cd AI-Youtube-Shorts-Generator-Arch-DroidSpaces
-
+```
 Run the automatic installer:
-
+```
 ./install.sh
-
+```
 The installer prepares the required environment, including:
 
 - Python virtual environment
