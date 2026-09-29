@@ -118,6 +118,10 @@ def download_youtube_local(video_url: str, fmt: str = "720", out_dir: Optional[s
         "quiet": True,
         "no_warnings": False,
         "noprogress": False,
+
+        # YouTube EJS challenge solving.
+        # Deno is the recommended runtime and is enabled by yt-dlp.
+        "js_runtimes": {"deno": {}},
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:

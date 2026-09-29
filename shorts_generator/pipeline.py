@@ -13,6 +13,77 @@ from .downloader import download_youtube
 from .highlights import call_muapi_llm, get_highlights
 from .transcriber import transcribe
 
+SHORT_MIN_DURATION = 20.0
+SHORT_MAX_DURATION = 90.0
+
+
+def _normalize_highlight_duration(
+    highlight: Dict,
+    transcript: Dict,
+) -> Optional[Dict]:
+    """Keep generated Shorts inside a strict 20-90 second range."""
+    try:
+        start = float(highlight["start_time"])
+        end = float(highlight["end_time"])
+    except (KeyError, TypeError, ValueError):
+        return None
+
+    if end <= start:
+        return None
+
+    duration = end - start
+
+    # Reject unusably long/invalid candidates instead of rendering
+    # a long section of the source video.
+    if duration > SHORT_MAX_DURATION:
+        end = start + SHORT_MAX_DURATION
+        duration = SHORT_MAX_DURATION
+
+    if duration < SHORT_MIN_DURATION:
+        return None
+
+    segments = transcript.get("segments", [])
+
+    # Align the forced 90-second end to a Whisper segment boundary.
+    if segments:
+        valid_ends = [
+            float(seg["end"])
+            for seg in segments
+            if start < float(seg.get("end", 0)) <= start + SHORT_MAX_DURATION
+        ]
+        if valid_ends:
+            end = max(valid_ends)
+            duration = end - start
+
+    if duration < SHORT_MIN_DURATION:
+        return None
+
+    result = dict(highlight)
+    result["start_time"] = round(start, 3)
+    result["end_time"] = round(end, 3)
+    return result
+
+
+def _prepare_short_candidates(
+    highlights: List[Dict],
+    transcript: Dict,
+    limit: int,
+) -> List[Dict]:
+    """Validate and hard-limit LLM highlights for Shorts."""
+    prepared = []
+
+    for highlight in highlights:
+        normalized = _normalize_highlight_duration(highlight, transcript)
+        if normalized is not None:
+            prepared.append(normalized)
+
+    prepared.sort(
+        key=lambda h: int(h.get("score", 0)),
+        reverse=True,
+    )
+
+    return prepared[:limit]
+
 
 def _run_local(
     youtube_url: str,
@@ -39,10 +110,29 @@ def _run_local(
     if not all_highlights:
         raise RuntimeError("Highlight generator returned zero clips.")
 
-    top = sorted(all_highlights, key=lambda h: int(h.get("score", 0)), reverse=True)[:num_clips]
-    print(f"[pipeline/local] cropping {len(top)} of {len(all_highlights)} candidates", flush=True)
+    top = _prepare_short_candidates(
+        all_highlights,
+        transcript,
+        num_clips,
+    )
 
-    shorts = crop_highlights_local(source_path, top, aspect_ratio=aspect_ratio)
+    if not top:
+        raise RuntimeError(
+            "No valid Shorts candidates between 20 and 90 seconds."
+        )
+
+    print(
+        f"[pipeline/local] cropping {len(top)} of "
+        f"{len(all_highlights)} candidates",
+        flush=True,
+    )
+
+    shorts = crop_highlights_local(
+        source_path,
+        top,
+        aspect_ratio=aspect_ratio,
+        transcript=transcript,
+    )
 
     return {
         "mode": "local",
@@ -73,8 +163,22 @@ def _run_api(
     if not all_highlights:
         raise RuntimeError("Highlight generator returned zero clips.")
 
-    top = sorted(all_highlights, key=lambda h: int(h.get("score", 0)), reverse=True)[:num_clips]
-    print(f"[pipeline] cropping {len(top)} of {len(all_highlights)} candidates", flush=True)
+    top = _prepare_short_candidates(
+        all_highlights,
+        transcript,
+        num_clips,
+    )
+
+    if not top:
+        raise RuntimeError(
+            "No valid Shorts candidates between 20 and 90 seconds."
+        )
+
+    print(
+        f"[pipeline] cropping {len(top)} of "
+        f"{len(all_highlights)} candidates",
+        flush=True,
+    )
 
     shorts = crop_highlights(source_url, top, aspect_ratio=aspect_ratio)
 

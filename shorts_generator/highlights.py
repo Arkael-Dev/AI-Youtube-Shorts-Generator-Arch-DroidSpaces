@@ -49,11 +49,12 @@ Your task: identify the most viral-worthy highlights from the transcript.
 
 Rules:
 - Every highlight must open with a strong HOOK — a line that grabs attention within the first 3 seconds
-- Duration sweet spot: 45-90 seconds. Go shorter (20-44s) only for a perfect standalone one-liner. Go longer (91-180s) only when a story arc needs full context to land
+- Duration MUST be 45-90 seconds. Never exceed 90 seconds. Prefer 50-75 seconds when the thought is complete
 - Never cut mid-sentence or mid-thought — each clip must feel complete and self-contained
 - Clips must not overlap significantly with each other
 - Score 0-100 on viral potential (not general quality)
 - {num_clips_instruction}
+- For each clip, choose a complete standalone segment. Do NOT return the entire video.
 - For each highlight, identify the single best "hook_sentence" — the opening line that would make someone stop scrolling
 - Explain in one sentence why this clip is viral ("virality_reason")
 

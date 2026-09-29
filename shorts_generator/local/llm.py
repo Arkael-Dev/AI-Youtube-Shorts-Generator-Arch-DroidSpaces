@@ -31,12 +31,20 @@ def call_openai_llm(prompt: str) -> str:
 
 def call_ollama_llm(prompt: str) -> str:
     from openai import OpenAI
-    client = OpenAI(base_url=OLLAMA_BASE_URL, api_key="ollama")
+
+    client = OpenAI(
+        base_url=OLLAMA_BASE_URL,
+        api_key="ollama",
+        timeout=300.0,
+    )
+
     response = client.chat.completions.create(
         model=OLLAMA_MODEL,
         temperature=0.2,
+        max_tokens=2048,
         messages=[{"role": "user", "content": prompt}],
     )
+
     return response.choices[0].message.content or ""
 
 def call_gemini_llm(prompt: str) -> str:
@@ -72,5 +80,5 @@ def call_local_llm(prompt: str) -> str:
     if provider == "ollama":
         return call_ollama_llm(prompt)
     raise RuntimeError(
-        f"Unknown LLM_PROVIDER={provider!r}. Use 'openai' or 'gemini'."
+        f"Unknown LLM_PROVIDER={provider!r}. Use 'ollama', 'openai', or 'gemini'."
     )
