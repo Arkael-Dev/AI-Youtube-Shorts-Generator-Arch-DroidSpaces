@@ -28,7 +28,10 @@ Features
 - 📦 Automatic dependency installation
 
 Installation
-
+install olama 
+```
+cd /tmp && curl -fsSL https://ollama.com/install.sh | sh && ollama --version
+```
 Clone the repository:
 
 ```
