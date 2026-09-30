@@ -3,6 +3,7 @@
 # Optional dependencies for --mode local.
 yt-dlp[default]>=2026.1.0
 faster-whisper>=1.0.0
+av==15.1.0
 openai>=1.0.0
 google-genai>=1.0.0
 opencv-python>=4.8.0
