@@ -24,8 +24,7 @@ pacman -S --needed --noconfirm \
     curl \
     unzip \
     fontconfig \
-    ttf-dejavu \
-    ollama
+    ttf-dejavu
 
 echo
 echo "[2/8] Preparing Deno JavaScript runtime..."
