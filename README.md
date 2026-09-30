@@ -28,9 +28,9 @@ Features
 - 📦 Automatic dependency installation
 
 Installation
-install olama 
+Update Repostory Arch linux 
 ```
-cd /tmp && curl -fsSL https://ollama.com/install.sh | sh && ollama --version
+sudo Pacman -Syyu
 ```
 Clone the repository:
 
