@@ -67,6 +67,10 @@ python -m pip install -r requirements-local.txt
 python -m pip install -U "yt-dlp[default]" yt-dlp-ejs
 
 echo
+echo "Preparing Faster-Whisper base model..."
+python -c 'from faster_whisper import WhisperModel; WhisperModel("base", device="cpu", compute_type="int8"); print("Faster-Whisper base: OK")'
+
+echo
 echo "[5/8] Checking FFmpeg subtitle support..."
 
 if ! ffmpeg -filters 2>/dev/null | grep -Eq '(^|[[:space:]])ass([[:space:]]|$)'; then
