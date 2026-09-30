@@ -89,15 +89,32 @@ echo "DejaVu Sans: OK"
 echo
 echo "[6/8] Preparing Ollama..."
 
-if ! pgrep -x ollama >/dev/null 2>&1; then
+if ! command -v ollama >/dev/null 2>&1; then
+    echo "Ollama not found. Installing official Ollama Linux package..."
+    curl -fsSL https://ollama.com/install.sh | sh
+fi
+
+if ! command -v ollama >/dev/null 2>&1; then
+    echo "ERROR: Ollama installation failed."
+    exit 1
+fi
+
+echo "Ollama: $(ollama --version 2>/dev/null || ollama -v)"
+
+if ! curl -fsS http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
+    echo "Starting Ollama server..."
     nohup ollama serve >/tmp/ollama.log 2>&1 &
-    sleep 3
+    sleep 5
 fi
 
 if ! curl -fsS http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
-    echo "WARNING: Ollama server did not respond."
-    echo "Check /tmp/ollama.log if needed."
+    echo "ERROR: Ollama server did not respond."
+    echo "----- /tmp/ollama.log -----"
+    cat /tmp/ollama.log 2>/dev/null || true
+    exit 1
 fi
+
+echo "Ollama server: OK"
 
 echo
 echo "[7/8] Installing Ollama model..."
