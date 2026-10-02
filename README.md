@@ -30,7 +30,7 @@ Features
 Installation
 Update Repostory Arch linux 
 ```
-sudo Pacman -Syyu
+sudo pacman -Syyu
 ```
 Clone the repository:
 
